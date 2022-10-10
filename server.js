@@ -1,11 +1,26 @@
 'use strict';
 
 const Joi = require('joi');
+const helmet = require('helmet');
+const fs = require('fs');
+const path = require('path')
+const morgan = require('morgan');
+const logger = require('./logger');
 const express = require('express');
 
 // App
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.use(helmet());
+
+//app.use(logger);
+// create a write stream (in append mode)
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/debug.log'), { flags: 'a' })
+// setup the logger
+app.get('env') === 'development' ? app.use(morgan('tiny')) : app.use(morgan('combined', { stream: accessLogStream })) 
+
 
 // const array of courses
 const courses = [
