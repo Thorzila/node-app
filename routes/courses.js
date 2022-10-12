@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Joi = require('joi');
 
 // const array of courses
 const courses = [
@@ -8,17 +9,17 @@ const courses = [
     { id: 3, name: 'course3' }
   ];
 
-  router.get('/api/courses', (req, res) => {
+  router.get('/', (req, res) => {
     return res.send(courses);
   });
   
-  router.get('/api/courses/:id', (req, res) => {
+  router.get('/:id', (req, res) => {
     let course = courses.find(c => c.id === parseInt(req.params.id));
     if (!course) return res.status(404).send('The course with the given ID was not found.');
     res.send(course);
   });
   
-  router.post('/api/courses', (req, res) => {
+  router.post('/', (req, res) => {
     try {
       const { error } = validateCourse(req.body);
       if (error) return res.status(400).send(error.details[0].message);
@@ -33,7 +34,7 @@ const courses = [
     }
   });
   
-  router.put('/api/courses/:id', (req, res) => {
+  router.put('/:id', (req, res) => {
     // Look up the course
     // If not existing, return 404
     let course = courses.find(c => c.id === parseInt(req.params.id));
@@ -48,7 +49,7 @@ const courses = [
     res.send(course);
   });
   
-  router.delete('/api/courses/:id', (req, res) => {
+  router.delete('/:id', (req, res) => {
     // Look up the course
     // Not existing, return 404
     let course = courses.find(c => c.id === parseInt(req.params.id));
